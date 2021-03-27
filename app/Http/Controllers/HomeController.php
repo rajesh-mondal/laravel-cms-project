@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,9 +12,8 @@ class HomeController extends Controller {
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    public function __construct() {
+        $this->middleware( 'auth' );
     }
 
     /**
@@ -21,12 +21,25 @@ class HomeController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('home');
+    
+    public function index() {
+        return view( 'home' );
     }
 
-    public function shoutHome(){
-        return view("shouthome");
+    public function shoutHome() {
+        return view( "shouthome" );
+    }
+
+    public function saveStatus( Request $request ) {
+        if ( Auth::check() ) {
+            $status = $request->post( 'status' );
+            $userId = Auth::id();
+
+            $statusModel = new Status();
+            $statusModel->status = $status;
+            $statusModel->user_id = $userId;
+            $statusModel->save();
+            return redirect()->route( 'shout' );
+        }
     }
 }
