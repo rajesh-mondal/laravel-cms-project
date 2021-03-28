@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Status extends Model
 {
     protected $table = 'status';
-    use HasFactory;
+    function user(){
+        return $this->belongsTo(\App\Models\User::class);
+    }
 }
