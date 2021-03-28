@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Status;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,4 +44,21 @@ class HomeController extends Controller {
             return redirect()->route( 'shout' );
         }
     }
+
+    function saveProfile( Request $request ) {
+        if ( Auth::check() ) {
+            $user = Auth::user();
+            $user->name = $request->post( 'name' );
+            $user->email = $request->post( 'email' );
+            $user->nickname = $request->post( 'nickname' );
+            $user->save();
+            return redirect()->route( 'shout.profile' );
+        }
+    }
+
+    public function profile() {
+
+        return view( 'profile' );
+    }
+
 }
