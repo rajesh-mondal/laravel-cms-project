@@ -29,7 +29,9 @@ class HomeController extends Controller {
     public function shoutHome() {
         $userId = Auth::id();
         $status = Status::where( 'user_id', $userId )->orderBy( 'id', 'desc' )->get();
-        return view( "shouthome", ['status' => $status] );
+        $avatar = empty( Auth::user()->avatar ) ? asset( 'images/avatar.png' ) : Auth::user()->avatar;
+        
+        return view( "shouthome", array( 'status'=>$status, 'avatar'=>$avatar ) );
     }
 
     public function saveStatus( Request $request ) {
