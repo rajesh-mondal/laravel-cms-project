@@ -48,9 +48,15 @@ class HomeController extends Controller {
     function saveProfile( Request $request ) {
         if ( Auth::check() ) {
             $user = Auth::user();
-            $user->name = $request->post( 'name' );
-            $user->email = $request->post( 'email' );
-            $user->nickname = $request->post( 'nickname' );
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->nickname = $request->nickname;
+
+            $profileImage = 'user' . $user->id . '.' . $request->image->extension();
+            $request->image->move( public_path( 'images' ), $profileImage );
+
+            $user->avatar = asset( "images/{$profileImage}");
+
             $user->save();
             return redirect()->route( 'shout.profile' );
         }
