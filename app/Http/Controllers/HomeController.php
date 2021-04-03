@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,8 +31,20 @@ class HomeController extends Controller {
         $userId = Auth::id();
         $status = Status::where( 'user_id', $userId )->orderBy( 'id', 'desc' )->get();
         $avatar = empty( Auth::user()->avatar ) ? asset( 'images/avatar.png' ) : Auth::user()->avatar;
-        
-        return view( "shouthome", array( 'status'=>$status, 'avatar'=>$avatar ) );
+
+        return view( "shouthome", array( 'status' => $status, 'avatar' => $avatar ) );
+    }
+
+    public function publicTimeline( $nickname ) {
+        $user = User::where( 'nickname', $nickname )->first();
+        if ( $user ) {
+            $status = Status::where( 'user_id', $user->id )->orderBy( 'id', 'desc' )->get();
+            $avatar = empty( $user->avatar ) ? asset( 'images/avatar.png' ) : $user->avatar;
+            $name = $user->name;
+            return view( "shoutpublic", array( 'status' => $status, 'avatar' => $avatar, 'name' => $name ) );
+        } else {
+            return redirect( '/' );
+        }
     }
 
     public function saveStatus( Request $request ) {
@@ -57,7 +70,7 @@ class HomeController extends Controller {
             $profileImage = 'user' . $user->id . '.' . $request->image->extension();
             $request->image->move( public_path( 'images' ), $profileImage );
 
-            $user->avatar = asset( "images/{$profileImage}");
+            $user->avatar = asset( "images/{$profileImage}" );
 
             $user->save();
             return redirect()->route( 'shout.profile' );
