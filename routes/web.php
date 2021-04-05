@@ -32,5 +32,5 @@ Route::post('/savestatus', [HomeController::class,'saveStatus'])->name('shout.sa
 Route::get('/profile', [HomeController::class,'profile'])->name('shout.profile');
 Route::get('/shout/{nickname}', [HomeController::class,'publicTimeline'])->name('shout.public');
 Route::post('/saveprofile', [HomeController::class,'saveProfile'])->name('shout.saveprofile');
-
-
+Route::get( '/shout/makefriend/{friendId}', [HomeController::class, 'makeFriend'] )->name( 'shout.makefriend' );
+Route::get( '/shout/unfriend/{friendId}', [HomeController::class, 'unFriend'] )->name( 'shout.unfriend' );

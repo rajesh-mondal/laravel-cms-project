@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Friend;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,7 +40,18 @@ class HomeController extends Controller {
             $status = Status::where( 'user_id', $user->id )->orderBy( 'id', 'desc' )->get();
             $avatar = empty( $user->avatar ) ? asset( 'images/avatar.png' ) : $user->avatar;
             $name = $user->name;
-            return view( "shoutpublic", array( 'status' => $status, 'avatar' => $avatar, 'name' => $name ) );
+            $displayActions = false;
+            if ( Auth::check() ) {
+                if ( Auth::user()->id != $user->id ) {
+                    $displayActions = true;
+                }
+            }
+            return view( "shoutpublic", array(
+                'status'         => $status,
+                'avatar'         => $avatar,
+                'name'           => $name,
+                'displayActions' => $displayActions,
+                'friendId'       => $user->id ) );
         } else {
             return redirect( '/' );
         }

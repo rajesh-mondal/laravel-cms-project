@@ -34,3 +34,10 @@
 @section('script')
 
 @endsection
+
+@section('actions')
+    @if ($displayActions)
+    <a href='{{ route('shout.makefriend',$friendId) }}'> Make Friend </a> | 
+    <a href='{{ route('shout.unfriend',$friendId) }}'> UnFriend </a>
+    @endif
+@endsection
