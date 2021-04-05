@@ -20,7 +20,13 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('/home', function () {
+    return view('home');
+});
+//Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/shout', [HomeController::class,'shoutHome'])->name('shout');
 Route::post('/savestatus', [HomeController::class,'saveStatus'])->name('shout.save');
 Route::get('/profile', [HomeController::class,'profile'])->name('shout.profile');
