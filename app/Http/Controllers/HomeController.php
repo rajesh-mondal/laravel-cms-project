@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Friend;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -90,6 +91,25 @@ class HomeController extends Controller {
     public function profile() {
 
         return view( 'profile' );
+    }
+
+    public function makeFriend( $friendId ) {
+        $userId = Auth::user()->id;
+        if ( Friend::where( 'user_id', $userId )->where( 'friend_id', $friendId )->count() == 0 ) {
+            $friendship = new Friend();
+            $friendship->user_id = $userId;
+            $friendship->friend_id = $friendId;
+            $friendship->save();
+        }
+
+        if ( Friend::where( 'friend_id', $userId )->where( 'user_id', $friendId )->count() == 0 ) {
+            $friendship = new Friend();
+            $friendship->friend_id = $userId;
+            $friendship->user_id = $friendId;
+            $friendship->save();
+        }
+
+        return redirect()->route( 'shout' );
     }
 
 }
