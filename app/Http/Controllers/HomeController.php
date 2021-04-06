@@ -112,4 +112,12 @@ class HomeController extends Controller {
         return redirect()->route( 'shout' );
     }
 
+    public function unFriend( $friendId ) {
+        $userId = Auth::user()->id;
+        Friend::where( 'user_id', $userId )->where( 'friend_id', $friendId )->delete();
+        Friend::where( 'friend_id', $userId )->where( 'user_id', $friendId )->delete();
+
+        return redirect()->route( 'shout' );
+    }
+
 }
